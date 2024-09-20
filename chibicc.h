@@ -334,6 +334,7 @@ struct Type {
   // naturally handled as if it were "pointer to T", as required by
   // the C spec.
   Type *base;
+  bool zero_checked;
 
   // Declaration
   Token *name;

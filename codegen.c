@@ -151,6 +151,8 @@ static void gen_addr(Node *node) {
     println("  lea %s(%%rip), %%rax", node->var->name);
     return;
   case ND_DEREF:
+    if (!node->lhs->ty->zero_checked)
+      warn_tok(node->tok, "WARN: derefrencing an unchecked pointer!");
     gen_expr(node->lhs);
     return;
   case ND_COMMA:
@@ -279,6 +281,7 @@ static void cmp_zero(Type *ty) {
     println("  cmp $0, %%eax");
   else
     println("  cmp $0, %%rax");
+  ty->zero_checked = 1;
 }
 
 enum { I8, I16, I32, I64, U8, U16, U32, U64, F32, F64, F80 };
@@ -767,6 +770,8 @@ static void gen_expr(Node *node) {
     return;
   }
   case ND_DEREF:
+    if (!node->lhs->ty->zero_checked)
+      warn_tok(node->tok, "WARN: derefrencing an unchecked pointer!");
     gen_expr(node->lhs);
     load(node->ty);
     return;
