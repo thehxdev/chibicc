@@ -152,7 +152,7 @@ static void gen_addr(Node *node) {
     return;
   case ND_DEREF:
     if (!node->lhs->ty->zero_checked)
-      warn_tok(node->tok, "WARN: derefrencing an unchecked pointer!");
+      warn_tok(node->tok, "WARN: dereferencing an unchecked pointer");
     gen_expr(node->lhs);
     return;
   case ND_COMMA:
@@ -771,7 +771,7 @@ static void gen_expr(Node *node) {
   }
   case ND_DEREF:
     if (!node->lhs->ty->zero_checked)
-      warn_tok(node->tok, "WARN: derefrencing an unchecked pointer!");
+      warn_tok(node->tok, "WARN: dereferencing an unchecked pointer");
     gen_expr(node->lhs);
     load(node->ty);
     return;
