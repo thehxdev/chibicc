@@ -151,7 +151,7 @@ static void gen_addr(Node *node) {
     println("  lea %s(%%rip), %%rax", node->var->name);
     return;
   case ND_DEREF:
-    if (!node->lhs->ty->zero_checked)
+    if (node->lhs->ty->kind == TY_PTR && !node->lhs->ty->zero_checked)
       warn_tok(node->tok, "WARN: dereferencing an unchecked pointer");
     gen_expr(node->lhs);
     return;
@@ -770,7 +770,7 @@ static void gen_expr(Node *node) {
     return;
   }
   case ND_DEREF:
-    if (!node->lhs->ty->zero_checked)
+    if (node->lhs->ty->kind == TY_PTR && !node->lhs->ty->zero_checked)
       warn_tok(node->tok, "WARN: dereferencing an unchecked pointer");
     gen_expr(node->lhs);
     load(node->ty);
